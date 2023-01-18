@@ -6,11 +6,24 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    ports:
-      - 8000:8000
+    env_file:
+      - .env
+    expose:
+      - 8000
     volumes:
       - static:/app/static
       - media:/app/media
+    command: bash -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn virtualcatalog.wsgi -b 0.0.0.0:8000"
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./config/nginx:/etc/nginx/conf.d
+      - static:/static
+      - media:/media_files
+    depends_on:
+      - backendvirtualcatalog
 
 volumes:
   media:
