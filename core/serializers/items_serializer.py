@@ -8,10 +8,10 @@ class ItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Item
-        fields = ['id', 'name', 'description', 'piture']
+        fields = ['id', 'name', 'description', 'picture', 'price', 'category']
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        piture = instance.piture.name
-        representation['piture'] = piture
+        picture = instance.picture.name
+        representation['picture'] = picture
         return representation
